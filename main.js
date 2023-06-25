@@ -3,36 +3,44 @@ looker.plugins.visualizations.add({
     html_code: {
       type: 'string',
       label: 'HTML Code',
-      default: '<div>Hello, World!</div>',
-    },
-    css_code: {
-      type: 'string',
-      label: 'CSS Code',
-      default: 'div { color: red; }',
+      default: '<div id="curve_chart" style="width: 900px; height: 500px"></div>',
     },
     js_code: {
       type: 'string',
       label: 'JavaScript Code',
-      default: 'console.log("Hello, JavaScript!");',
+      default: `
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+          var data = google.visualization.arrayToDataTable([
+            ['Year', 'Sales', 'Expenses'],
+            ['2004',  1000,      400],
+            ['2005',  1170,      460],
+            ['2006',  660,       1120],
+            ['2007',  1030,      540]
+          ]);
+
+          var options = {
+            title: 'Company Performance',
+            curveType: 'function',
+            legend: { position: 'bottom' }
+          };
+
+          var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+          chart.draw(data, options);
+        }
+      `,
     },
   },
 
   create: function(element, config) {
-    element.innerHTML = '<div id="visualization-container"></div>';
+    element.innerHTML = config.html_code;
   },
 
   update: function(data, element, config, queryResponse) {
-    const container = element.querySelector('#visualization-container');
-    const htmlCode = config.html_code;
-    const cssCode = config.css_code;
     const jsCode = config.js_code;
-
-    container.innerHTML = htmlCode;
-    const styleElement = document.createElement('style');
-    styleElement.textContent = cssCode;
-    container.appendChild(styleElement);
-
-    // Execute the JavaScript code
     eval(jsCode);
   }
 });
