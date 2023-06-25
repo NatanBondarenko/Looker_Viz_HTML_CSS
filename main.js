@@ -3,7 +3,7 @@ looker.plugins.visualizations.add({
     html_code: {
       type: 'string',
       label: 'HTML Code',
-      default: '<div>Hello, World!</div>',
+      default: '<div id="visualization-container"></div>',
     },
     css_code: {
       type: 'string',
@@ -23,17 +23,15 @@ looker.plugins.visualizations.add({
   },
 
   create: function(element, config) {
-    element.innerHTML = '<div id="visualization-container"></div>';
+    element.innerHTML = config.html_code;
   },
 
   update: function(data, element, config, queryResponse) {
     const container = element.querySelector('#visualization-container');
-    const htmlCode = config.html_code;
     const cssCode = config.css_code;
     const jsCode1 = config.js_code1;
     const jsCode2 = config.js_code2;
 
-    container.innerHTML = htmlCode;
     const styleElement = document.createElement('style');
     styleElement.textContent = cssCode;
     container.appendChild(styleElement);
