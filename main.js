@@ -3,40 +3,34 @@ looker.plugins.visualizations.add({
     html_code: {
       type: 'string',
       label: 'HTML Code',
-      default: '<div>Hello, World!</div>',
+      default: '<html>\n<head>\n\n</head>\n<body style="font-family: Arial;border: 0 none;">\n  <div id="vis_div" style="width: 600px; height: 400px;"></div>\n</body>\n</html>',
     },
-    css_code: {
+    js_code_1: {
       type: 'string',
-      label: 'CSS Code',
-      default: 'div { color: red; }',
+      label: 'JavaScript Code 1',
+      default: 'google.charts.load(\'current\');\ngoogle.charts.setOnLoadCallback(drawVisualization);\n\nfunction drawVisualization() {\n  var wrapper = new google.visualization.ChartWrapper({\n    chartType: \'LineChart\',\n    dataSourceUrl: \'http://spreadsheets.google.com/tq?key=pCQbetd-CptGXxxQIG7VFIQ&pub=1\',\n    query: \'SELECT A,D WHERE D > 100 ORDER BY D\',\n    options: {\'title\': \'Countries\'},\n    containerId: \'vis_div\'\n  });\n  wrapper.draw()\n\n  // No query callback handler needed!\n}',
     },
-    js_code: {
-      type: 'array',
-      label: 'JavaScript Code',
-      default: [
-        'console.log("Hello, JavaScript!");',
-      ],
+    js_code_2: {
+      type: 'string',
+      label: 'JavaScript Code 2',
+      default: '',
     },
   },
 
   create: function(element, config) {
-    element.innerHTML = '<div id="visualization-container"></div>';
+    element.innerHTML = config.html_code;
   },
 
   update: function(data, element, config, queryResponse) {
-    const container = element.querySelector('#visualization-container');
-    const htmlCode = config.html_code;
-    const cssCode = config.css_code;
-    const jsCodeArray = config.js_code;
+    const jsCode1 = config.js_code_1;
+    const jsCode2 = config.js_code_2;
 
-    container.innerHTML = htmlCode;
-    const styleElement = document.createElement('style');
-    styleElement.textContent = cssCode;
-    container.appendChild(styleElement);
+    // Execute JavaScript code 1
+    eval(jsCode1);
 
-    // Execute the JavaScript code
-    jsCodeArray.forEach(jsCode => {
-      eval(jsCode);
-    });
+    // Execute JavaScript code 2 if provided
+    if (jsCode2) {
+      eval(jsCode2);
+    }
   }
 });
