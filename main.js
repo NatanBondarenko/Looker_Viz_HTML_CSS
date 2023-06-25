@@ -11,9 +11,11 @@ looker.plugins.visualizations.add({
       default: 'div { color: red; }',
     },
     js_code: {
-      type: 'string',
+      type: 'array',
       label: 'JavaScript Code',
-      default: 'console.log("Hello, JavaScript!");',
+      default: [
+        'console.log("Hello, JavaScript!");',
+      ],
     },
   },
 
@@ -25,7 +27,7 @@ looker.plugins.visualizations.add({
     const container = element.querySelector('#visualization-container');
     const htmlCode = config.html_code;
     const cssCode = config.css_code;
-    const jsCode = config.js_code;
+    const jsCodeArray = config.js_code;
 
     container.innerHTML = htmlCode;
     const styleElement = document.createElement('style');
@@ -33,6 +35,8 @@ looker.plugins.visualizations.add({
     container.appendChild(styleElement);
 
     // Execute the JavaScript code
-    eval(jsCode);
+    jsCodeArray.forEach(jsCode => {
+      eval(jsCode);
+    });
   }
 });
