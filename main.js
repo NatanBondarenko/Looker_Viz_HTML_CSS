@@ -30,6 +30,7 @@ looker.plugins.visualizations.add({
     const iframe = document.createElement('iframe');
     iframe.style.width = '100%';
     iframe.style.height = '100%';
+    iframe.sandbox = 'allow-scripts allow-same-origin';
 
     // Append the iframe to the element
     element.innerHTML = '';
